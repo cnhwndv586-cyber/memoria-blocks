@@ -19,7 +19,7 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:10p
 .challenge-banner{display:none;margin-top:8px;background:#21331f;border:1px solid #4e8150;border-radius:12px;padding:9px 10px;font-size:11px;font-weight:800}.challenge-banner.on{display:block}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0 9px}.stat{background:var(--panel);border:1px solid #293e4e;border-radius:14px;padding:9px 3px;text-align:center}.stat b{display:block;font-size:17px}.stat span{font-size:8px;color:var(--muted);font-weight:900}
 .progress{height:7px;background:#263847;border-radius:9px;overflow:hidden;margin-bottom:10px}.bar{height:100%;background:var(--yellow);width:0;transition:.2s}
-.board{display:grid;gap:6px}.card{border:0;padding:0;background:transparent;aspect-ratio:1;perspective:700px}.inner{display:block;position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:.28s cubic-bezier(.2,.72,.2,1)}.card.flip .inner,.card.match .inner,.card.hint .inner{transform:rotateY(180deg)}
+.board{display:grid;gap:6px}.card{position:relative;display:block;border:0;padding:0;background:transparent;aspect-ratio:1/1;perspective:700px;overflow:visible}.inner{display:block;position:absolute;inset:0;width:auto;height:auto;transform-style:preserve-3d;transition:.28s cubic-bezier(.2,.72,.2,1)}.card.flip .inner,.card.match .inner,.card.hint .inner{transform:rotateY(180deg)}
 .face{display:block;position:absolute;inset:0;border-radius:11px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}.back{background:linear-gradient(135deg,#23394d,#111f2d);border:1px solid #60788b;box-shadow:0 4px 10px #0005}.back:after{content:"";position:absolute;inset:13%;border:1px solid #40586b;border-radius:8px}.front{transform:rotateY(180deg);background:#e9eef1;border:2px solid #e6edf1}.front img{width:100%;height:100%;object-fit:cover;display:block}.match .front{border-color:var(--green);box-shadow:0 0 0 2px var(--green)}.hint .front{opacity:.43;filter:saturate(.55) brightness(1.12)}
 .actions{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:6px;margin-top:11px}.act{border:0;border-radius:14px;padding:13px 5px;font-size:12px;font-weight:900;color:white;background:#1b2c3a}.act.h{background:var(--purple)}.act:disabled{opacity:.4}
 .screen{display:none}.screen.on{display:block}.levels{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.lvl{position:relative;aspect-ratio:1;border:1px solid #34495b;background:var(--panel);color:white;border-radius:12px;font-weight:900}.lvl.lock{opacity:.3}.lvl.current{outline:2px solid var(--yellow)}.lvl small{position:absolute;bottom:4px;left:0;right:0;font-size:8px;letter-spacing:-1px}
@@ -219,6 +219,6 @@ $("next").onclick=()=>{challenge=null;current=current===TOTAL?1:Math.min(save.un
 $("share").onclick=shareChallenge;
 $("sound").onclick=e=>{soundOn=!soundOn;e.currentTarget.textContent=soundOn?"🔊":"🔇"};
 setup();
-if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"));
+if("serviceWorker"in navigator){navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister()));caches.keys().then(ks=>ks.forEach(k=>caches.delete(k)))}
 </script>
 </body></html>

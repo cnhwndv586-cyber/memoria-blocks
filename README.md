@@ -1,3 +1,5 @@
-# Memoria Blocks V2 — Photo Fix
+# Memoria Blocks V2 — Safari Fix
 
-Corrección: las fotografías están embebidas dentro del juego y ya no dependen de un servidor externo.
+Corrección específica para iPhone/Safari:
+- las cartas llenan correctamente su espacio;
+- se elimina el caché antiguo del service worker para evitar versiones anteriores.
