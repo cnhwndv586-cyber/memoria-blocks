@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+  <meta name="theme-color" content="#f4c400" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Memoria" />
+  <title>Memoria Blocks</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <style>
+    :root{
+      --yellow:#f4c400;
+      --yellow-dark:#c99f00;
+      --ink:#151515;
+      --paper:#f7f5ef;
+      --card:#fff;
+      --shadow:0 8px 22px rgba(0,0,0,.12);
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;min-height:100%;font-family:Inter,ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;background:var(--paper);color:var(--ink)}
+    body{min-height:100dvh;display:flex;justify-content:center}
+    .app{width:min(100%,720px);min-height:100dvh;padding:calc(18px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom))}
+    header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+    h1{font-size:clamp(28px,7vw,42px);line-height:.95;margin:0;font-weight:900;letter-spacing:-1.4px}
+    .subtitle{margin-top:6px;font-size:13px;color:#666;font-weight:650}
+    button{font:inherit}
+    .icon-btn{border:0;background:#fff;border-radius:16px;padding:11px 14px;box-shadow:var(--shadow);font-weight:800}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 14px}
+    .stat{background:#fff;border-radius:16px;padding:10px 8px;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,.07)}
+    .stat b{display:block;font-size:20px}
+    .stat span{font-size:11px;color:#777;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+    .progress-wrap{height:9px;background:#e7e3d8;border-radius:999px;overflow:hidden;margin-bottom:15px}
+    .progress{height:100%;width:0;background:var(--yellow);transition:width .25s ease}
+    .board{display:grid;gap:8px;width:100%;margin:auto}
+    .card{position:relative;aspect-ratio:1/1;border:0;background:transparent;padding:0;perspective:800px}
+    .card-inner{position:absolute;inset:0;transition:transform .28s cubic-bezier(.2,.7,.2,1);transform-style:preserve-3d}
+    .card.flipped .card-inner,.card.matched .card-inner{transform:rotateY(180deg)}
+    .face{position:absolute;inset:0;display:grid;place-items:center;border-radius:14px;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 5px 13px rgba(0,0,0,.14);user-select:none}
+    .back{background:linear-gradient(145deg,#ffd91e,var(--yellow));border:2px solid rgba(0,0,0,.08)}
+    .back::after{content:"";width:36%;height:36%;border-radius:9px;background:rgba(255,255,255,.33);box-shadow:inset 0 0 0 2px rgba(255,255,255,.2)}
+    .front{background:#fff;transform:rotateY(180deg);font-size:clamp(24px,8vw,50px)}
+    .matched .front{outline:3px solid #32b36b;box-shadow:0 5px 16px rgba(50,179,107,.28)}
+    .controls{display:flex;gap:9px;margin-top:15px}
+    .primary,.secondary{flex:1;border:0;border-radius:16px;padding:14px 12px;font-weight:900;font-size:15px}
+    .primary{background:var(--yellow);color:#161616}
+    .secondary{background:#fff;color:#222;box-shadow:0 4px 15px rgba(0,0,0,.08)}
+    .overlay{position:fixed;inset:0;background:rgba(20,20,20,.48);display:none;align-items:center;justify-content:center;padding:20px;z-index:10}
+    .overlay.show{display:flex}
+    .modal{width:min(100%,430px);background:#fff;border-radius:26px;padding:24px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.28)}
+    .modal .emoji{font-size:58px}
+    .modal h2{font-size:30px;margin:6px 0 7px}
+    .modal p{color:#666;margin:0 0 18px}
+    .modal .primary{width:100%}
+    .level-chip{display:inline-block;margin-top:10px;background:#fff4b2;border:1px solid #f0d35c;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:850}
+    @media (max-width:390px){
+      .app{padding-left:11px;padding-right:11px}
+      .board{gap:6px}
+      .face{border-radius:11px}
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <div>
+        <h1>MEMORIA</h1>
+        <div class="subtitle">Encuentra todas las parejas</div>
+        <div class="level-chip" id="difficultyText">Nivel 1 · 6 parejas</div>
+      </div>
+      <button class="icon-btn" id="soundBtn" aria-label="Sonido">🔊</button>
+    </header>
+
+    <section class="stats">
+      <div class="stat"><b id="level">1</b><span>Nivel</span></div>
+      <div class="stat"><b id="moves">0</b><span>Movimientos</span></div>
+      <div class="stat"><b id="time">0:00</b><span>Tiempo</span></div>
+    </section>
+
+    <div class="progress-wrap"><div class="progress" id="progress"></div></div>
+
+    <section class="board" id="board" aria-label="Tablero de memoria"></section>
+
+    <div class="controls">
+      <button class="secondary" id="restartBtn">Reiniciar</button>
+      <button class="primary" id="newGameBtn">Nueva partida</button>
+    </div>
+  </main>
+
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <div class="emoji">🏆</div>
+      <h2>¡Nivel superado!</h2>
+      <p id="resultText"></p>
+      <button class="primary" id="nextBtn">Siguiente nivel</button>
+    </div>
+  </div>
+
+<script>
+const symbols = [
+  "🍎","🚗","⚽","🐶","🌟","🎸","🍕","🚀","🐸","🎯",
+  "🦁","🎲","🍉","✈️","🐙","👑","💎","🧩","🎮","🦖",
+  "🌈","🛸","🐼","🍩","🏀","🎹","🦋","🧠","🦊","🎈",
+  "🧸","🚲","🌵","🐳","🍓","🛵","🥑","🦜","🪐","🏎️"
+];
+
+const levels = [
+  {pairs:6, cols:3},
+  {pairs:8, cols:4},
+  {pairs:10, cols:4},
+  {pairs:12, cols:4},
+  {pairs:15, cols:5},
+  {pairs:18, cols:6},
+  {pairs:21, cols:6},
+  {pairs:24, cols:6}
+];
+
+let levelIndex = Number(localStorage.getItem("memoryLevel") || 0);
+if(levelIndex >= levels.length) levelIndex = 0;
+
+let deck=[], first=null, second=null, lock=false, moves=0, matched=0;
+let startedAt=null, timerId=null, soundOn=true;
+
+const board = document.getElementById("board");
+const movesEl = document.getElementById("moves");
+const timeEl = document.getElementById("time");
+const levelEl = document.getElementById("level");
+const progressEl = document.getElementById("progress");
+const overlay = document.getElementById("overlay");
+const resultText = document.getElementById("resultText");
+const diffText = document.getElementById("difficultyText");
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function beep(freq=440, duration=.06){
+  if(!soundOn) return;
+  try{
+    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    const osc=ctx.createOscillator(), gain=ctx.createGain();
+    osc.frequency.value=freq; osc.type="sine";
+    gain.gain.setValueAtTime(.045,ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+duration);
+    osc.connect(gain); gain.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime+duration);
+  }catch(e){}
+}
+
+function formatTime(sec){
+  const m=Math.floor(sec/60), s=sec%60;
+  return `${m}:${String(s).padStart(2,"0")}`;
+}
+
+function startTimer(){
+  if(startedAt) return;
+  startedAt=Date.now();
+  timerId=setInterval(()=>{
+    timeEl.textContent=formatTime(Math.floor((Date.now()-startedAt)/1000));
+  },250);
+}
+
+function stopTimer(){
+  clearInterval(timerId);
+  timerId=null;
+}
+
+function setupLevel(){
+  stopTimer();
+  first=second=null; lock=false; moves=0; matched=0; startedAt=null;
+  movesEl.textContent="0"; timeEl.textContent="0:00"; progressEl.style.width="0%";
+  overlay.classList.remove("show");
+
+  const cfg=levels[levelIndex];
+  levelEl.textContent=levelIndex+1;
+  diffText.textContent=`Nivel ${levelIndex+1} · ${cfg.pairs} parejas`;
+  board.style.gridTemplateColumns=`repeat(${cfg.cols},1fr)`;
+
+  const chosen=shuffle([...symbols]).slice(0,cfg.pairs);
+  deck=shuffle([...chosen,...chosen].map((symbol,i)=>({id:i,symbol})));
+  render();
+}
+
+function render(){
+  board.innerHTML="";
+  deck.forEach((item, idx)=>{
+    const btn=document.createElement("button");
+    btn.className="card";
+    btn.dataset.idx=idx;
+    btn.setAttribute("aria-label","Carta oculta");
+    btn.innerHTML=`
+      <span class="card-inner">
+        <span class="face back"></span>
+        <span class="face front">${item.symbol}</span>
+      </span>`;
+    btn.addEventListener("click",()=>flip(btn,idx));
+    board.appendChild(btn);
+  });
+}
+
+function flip(card, idx){
+  if(lock || card.classList.contains("flipped") || card.classList.contains("matched")) return;
+  startTimer();
+  card.classList.add("flipped");
+  beep(520,.045);
+
+  if(first===null){
+    first={card,idx};
+    return;
+  }
+
+  second={card,idx};
+  moves++;
+  movesEl.textContent=moves;
+  lock=true;
+
+  if(deck[first.idx].symbol===deck[second.idx].symbol){
+    setTimeout(()=>{
+      first.card.classList.add("matched");
+      second.card.classList.add("matched");
+      first.card.classList.remove("flipped");
+      second.card.classList.remove("flipped");
+      matched++;
+      progressEl.style.width=`${matched/levels[levelIndex].pairs*100}%`;
+      beep(800,.08);
+      first=second=null; lock=false;
+      if(matched===levels[levelIndex].pairs) win();
+    },260);
+  }else{
+    setTimeout(()=>{
+      first.card.classList.remove("flipped");
+      second.card.classList.remove("flipped");
+      first=second=null; lock=false;
+      beep(250,.07);
+    },720);
+  }
+}
+
+function win(){
+  stopTimer();
+  const seconds=Math.floor((Date.now()-startedAt)/1000);
+  resultText.textContent=`Completaste ${levels[levelIndex].pairs} parejas en ${moves} movimientos y ${formatTime(seconds)}.`;
+  if(levelIndex < levels.length-1){
+    localStorage.setItem("memoryLevel", String(levelIndex+1));
+    document.getElementById("nextBtn").textContent="Siguiente nivel";
+  }else{
+    document.getElementById("nextBtn").textContent="Volver al nivel 1";
+  }
+  setTimeout(()=>overlay.classList.add("show"),450);
+}
+
+document.getElementById("restartBtn").onclick=setupLevel;
+document.getElementById("newGameBtn").onclick=()=>{
+  levelIndex=0;
+  localStorage.setItem("memoryLevel","0");
+  setupLevel();
+};
+document.getElementById("nextBtn").onclick=()=>{
+  levelIndex = (levelIndex+1)%levels.length;
+  localStorage.setItem("memoryLevel",String(levelIndex));
+  setupLevel();
+};
+document.getElementById("soundBtn").onclick=(e)=>{
+  soundOn=!soundOn;
+  e.currentTarget.textContent=soundOn?"🔊":"🔇";
+};
+
+setupLevel();
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+}
+</script>
+</body>
+</html>
