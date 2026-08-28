@@ -3,9 +3,8 @@
   "short_name": "Memoria",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#f7f5ef",
-  "theme_color": "#f4c400",
-  "description": "Juego de memoria de parejas con dificultad creciente.",
+  "background_color": "#101923",
+  "theme_color": "#101923",
   "icons": [
     {
       "src": "icon-192.png",

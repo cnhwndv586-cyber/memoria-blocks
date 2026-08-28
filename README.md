@@ -1,21 +1,15 @@
-# Memoria Blocks V1
+# Memoria Blocks V2 Final
 
-Juego de memoria de parejas inspirado en los clásicos de cuadros amarillos.
+Incluye:
+- 100 niveles.
+- Fotografías reales en las cartas (Lorem Picsum, con caché al usarlas).
+- 1–3 estrellas.
+- Rachas y premio de pista cada 7 aciertos consecutivos.
+- Pistas fantasma de 2,2 segundos.
+- Diamante por memoria perfecta.
+- Récord personal.
+- Selector de niveles.
+- Retos por enlace sin necesidad de cuenta.
+- Web Share API para compartir por WhatsApp, Mensajes, etc.
 
-## Incluye
-- 8 niveles de dificultad creciente.
-- Desde 6 hasta 24 parejas.
-- Animación de volteo.
-- Cronómetro y contador de movimientos.
-- Progreso visual.
-- Sonidos simples.
-- Guarda el siguiente nivel en el navegador.
-- Preparado como PWA para instalar en iPhone/Android.
-
-## Probar en computador
-Abre `index.html` en el navegador. Para probar la instalación PWA y el modo offline, sirve la carpeta por HTTP/HTTPS.
-
-Ejemplo:
-python3 -m http.server 8000
-
-Luego abre http://localhost:8000
+Los retos comparan primero movimientos y, en caso de empate, tiempo.

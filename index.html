@@ -1,280 +1,224 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
-  <meta name="theme-color" content="#f4c400" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Memoria" />
-  <title>Memoria Blocks</title>
-  <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="apple-touch-icon" href="icon-192.png" />
-  <style>
-    :root{
-      --yellow:#f4c400;
-      --yellow-dark:#c99f00;
-      --ink:#151515;
-      --paper:#f7f5ef;
-      --card:#fff;
-      --shadow:0 8px 22px rgba(0,0,0,.12);
-    }
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html,body{margin:0;min-height:100%;font-family:Inter,ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;background:var(--paper);color:var(--ink)}
-    body{min-height:100dvh;display:flex;justify-content:center}
-    .app{width:min(100%,720px);min-height:100dvh;padding:calc(18px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom))}
-    header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
-    h1{font-size:clamp(28px,7vw,42px);line-height:.95;margin:0;font-weight:900;letter-spacing:-1.4px}
-    .subtitle{margin-top:6px;font-size:13px;color:#666;font-weight:650}
-    button{font:inherit}
-    .icon-btn{border:0;background:#fff;border-radius:16px;padding:11px 14px;box-shadow:var(--shadow);font-weight:800}
-    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 14px}
-    .stat{background:#fff;border-radius:16px;padding:10px 8px;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,.07)}
-    .stat b{display:block;font-size:20px}
-    .stat span{font-size:11px;color:#777;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
-    .progress-wrap{height:9px;background:#e7e3d8;border-radius:999px;overflow:hidden;margin-bottom:15px}
-    .progress{height:100%;width:0;background:var(--yellow);transition:width .25s ease}
-    .board{display:grid;gap:8px;width:100%;margin:auto}
-    .card{position:relative;aspect-ratio:1/1;border:0;background:transparent;padding:0;perspective:800px}
-    .card-inner{position:absolute;inset:0;transition:transform .28s cubic-bezier(.2,.7,.2,1);transform-style:preserve-3d}
-    .card.flipped .card-inner,.card.matched .card-inner{transform:rotateY(180deg)}
-    .face{position:absolute;inset:0;display:grid;place-items:center;border-radius:14px;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 5px 13px rgba(0,0,0,.14);user-select:none}
-    .back{background:linear-gradient(145deg,#ffd91e,var(--yellow));border:2px solid rgba(0,0,0,.08)}
-    .back::after{content:"";width:36%;height:36%;border-radius:9px;background:rgba(255,255,255,.33);box-shadow:inset 0 0 0 2px rgba(255,255,255,.2)}
-    .front{background:#fff;transform:rotateY(180deg);font-size:clamp(24px,8vw,50px)}
-    .matched .front{outline:3px solid #32b36b;box-shadow:0 5px 16px rgba(50,179,107,.28)}
-    .controls{display:flex;gap:9px;margin-top:15px}
-    .primary,.secondary{flex:1;border:0;border-radius:16px;padding:14px 12px;font-weight:900;font-size:15px}
-    .primary{background:var(--yellow);color:#161616}
-    .secondary{background:#fff;color:#222;box-shadow:0 4px 15px rgba(0,0,0,.08)}
-    .overlay{position:fixed;inset:0;background:rgba(20,20,20,.48);display:none;align-items:center;justify-content:center;padding:20px;z-index:10}
-    .overlay.show{display:flex}
-    .modal{width:min(100%,430px);background:#fff;border-radius:26px;padding:24px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.28)}
-    .modal .emoji{font-size:58px}
-    .modal h2{font-size:30px;margin:6px 0 7px}
-    .modal p{color:#666;margin:0 0 18px}
-    .modal .primary{width:100%}
-    .level-chip{display:inline-block;margin-top:10px;background:#fff4b2;border:1px solid #f0d35c;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:850}
-    @media (max-width:390px){
-      .app{padding-left:11px;padding-right:11px}
-      .board{gap:6px}
-      .face{border-radius:11px}
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#101923">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Memoria">
+<title>Memoria V2</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#101923;--panel:#172431;--yellow:#ffc400;--ink:#f8fafb;--muted:#9bacb9;--green:#54d174;--purple:#7b43d6;--line:#304657}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;background:linear-gradient(#0d1720,#142534);color:var(--ink)}
+body{min-height:100dvh}button{font:inherit}.app{max-width:720px;margin:auto;padding:calc(15px + env(safe-area-inset-top)) 12px calc(24px + env(safe-area-inset-bottom))}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.title{font-size:34px;font-weight:950;letter-spacing:-1px}.sub{font-size:12px;color:var(--muted);font-weight:700}
+.icon{border:1px solid var(--line);background:var(--panel);color:white;border-radius:14px;padding:10px 12px;box-shadow:0 5px 14px #0003}.badge{display:inline-block;background:#213240;border:1px solid #3a5264;border-radius:999px;padding:6px 10px;margin-top:8px;font-size:12px;font-weight:850}
+.challenge-banner{display:none;margin-top:8px;background:#21331f;border:1px solid #4e8150;border-radius:12px;padding:9px 10px;font-size:11px;font-weight:800}.challenge-banner.on{display:block}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0 9px}.stat{background:var(--panel);border:1px solid #293e4e;border-radius:14px;padding:9px 3px;text-align:center}.stat b{display:block;font-size:17px}.stat span{font-size:8px;color:var(--muted);font-weight:900}
+.progress{height:7px;background:#263847;border-radius:9px;overflow:hidden;margin-bottom:10px}.bar{height:100%;background:var(--yellow);width:0;transition:.2s}
+.board{display:grid;gap:6px}.card{border:0;padding:0;background:transparent;aspect-ratio:1;perspective:700px}.inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:.28s cubic-bezier(.2,.72,.2,1)}.card.flip .inner,.card.match .inner,.card.hint .inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:11px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}.back{background:linear-gradient(135deg,#23394d,#111f2d);border:1px solid #60788b;box-shadow:0 4px 10px #0005}.back:after{content:"";position:absolute;inset:13%;border:1px solid #40586b;border-radius:8px}.front{transform:rotateY(180deg);background:#e9eef1;border:2px solid #e6edf1}.front img{width:100%;height:100%;object-fit:cover;display:block}.match .front{border-color:var(--green);box-shadow:0 0 0 2px var(--green)}.hint .front{opacity:.43;filter:saturate(.55) brightness(1.12)}
+.actions{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:6px;margin-top:11px}.act{border:0;border-radius:14px;padding:13px 5px;font-size:12px;font-weight:900;color:white;background:#1b2c3a}.act.h{background:var(--purple)}.act:disabled{opacity:.4}
+.screen{display:none}.screen.on{display:block}.levels{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.lvl{position:relative;aspect-ratio:1;border:1px solid #34495b;background:var(--panel);color:white;border-radius:12px;font-weight:900}.lvl.lock{opacity:.3}.lvl.current{outline:2px solid var(--yellow)}.lvl small{position:absolute;bottom:4px;left:0;right:0;font-size:8px;letter-spacing:-1px}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:12px 0}.sum{background:var(--panel);border-radius:14px;padding:12px;text-align:center;border:1px solid #293e4e}.sum b{display:block;font-size:21px}.sum span{font-size:9px;color:var(--muted)}
+.overlay{display:none;position:fixed;inset:0;background:#000b;z-index:5;align-items:center;justify-content:center;padding:18px}.overlay.on{display:flex}.modal{background:#152431;border:1px solid #3b5365;border-radius:24px;width:min(430px,100%);padding:22px;text-align:center;box-shadow:0 25px 70px #0008}.modal h2{font-size:28px;margin:6px}.stars{font-size:34px}.diamond{padding:9px;border:1px solid #8dc8ef;border-radius:12px;margin:10px 0}.challenge-result{display:none;padding:9px;border-radius:12px;margin:10px 0;font-weight:900}.challenge-result.win{display:block;background:#193a25;border:1px solid #4f9e68}.challenge-result.lose{display:block;background:#3b2b19;border:1px solid #9b774d}
+.modalBtns{display:grid;grid-template-columns:1fr 1fr;gap:7px}.modalBtns button,.shareBtn{border:0;border-radius:13px;padding:13px;font-weight:900}.next{background:var(--yellow)}.again{background:#263847;color:white}.shareBtn{width:100%;margin-top:8px;background:#2c8d5d;color:white}
+.toast{position:fixed;bottom:35px;left:50%;transform:translateX(-50%);background:#05090d;color:white;padding:10px 14px;border-radius:999px;display:none;z-index:9;font-size:12px;white-space:nowrap}
+@media(max-width:390px){.app{padding-left:9px;padding-right:9px}.board{gap:5px}.face{border-radius:9px}.actions{gap:5px}.levels{gap:5px}.stat b{font-size:16px}}
+</style>
 </head>
 <body>
-  <main class="app">
-    <header>
-      <div>
-        <h1>MEMORIA</h1>
-        <div class="subtitle">Encuentra todas las parejas</div>
-        <div class="level-chip" id="difficultyText">Nivel 1 · 6 parejas</div>
-      </div>
-      <button class="icon-btn" id="soundBtn" aria-label="Sonido">🔊</button>
-    </header>
+<main class="app">
+<section id="game" class="screen on">
+<header>
+<div>
+<div class="title">MEMORIA</div>
+<div class="sub">Entrena tu memoria</div>
+<div id="badge" class="badge"></div>
+<div id="best" class="sub" style="margin-top:7px"></div>
+<div id="challengeBanner" class="challenge-banner"></div>
+</div>
+<div><button class="icon" id="map">🗺️</button> <button class="icon" id="sound">🔊</button></div>
+</header>
+<div class="stats">
+<div class="stat"><b id="level">1</b><span>NIVEL</span></div>
+<div class="stat"><b id="moves">0</b><span>MOVIMIENTOS</span></div>
+<div class="stat"><b id="time">0:00</b><span>TIEMPO</span></div>
+<div class="stat"><b id="streak">0🔥</b><span>RACHA</span></div>
+</div>
+<div class="progress"><div id="bar" class="bar"></div></div>
+<div id="board" class="board"></div>
+<div class="actions">
+<button id="restart" class="act">↻ Reiniciar</button>
+<button id="hint" class="act h">💡 Pista · <span id="hints">3</span></button>
+<button id="home" class="act">⟲ Nivel 1</button>
+</div>
+</section>
 
-    <section class="stats">
-      <div class="stat"><b id="level">1</b><span>Nivel</span></div>
-      <div class="stat"><b id="moves">0</b><span>Movimientos</span></div>
-      <div class="stat"><b id="time">0:00</b><span>Tiempo</span></div>
-    </section>
+<section id="levelsScreen" class="screen">
+<header><div class="title">NIVELES</div><button id="close" class="icon">✕</button></header>
+<div class="summary">
+<div class="sum"><b id="sumStars">0</b><span>ESTRELLAS</span></div>
+<div class="sum"><b id="sumDiamonds">0</b><span>DIAMANTES</span></div>
+<div class="sum"><b id="sumUnlocked">1</b><span>DESBLOQUEADOS</span></div>
+</div>
+<div id="levels" class="levels"></div>
+</section>
+</main>
 
-    <div class="progress-wrap"><div class="progress" id="progress"></div></div>
-
-    <section class="board" id="board" aria-label="Tablero de memoria"></section>
-
-    <div class="controls">
-      <button class="secondary" id="restartBtn">Reiniciar</button>
-      <button class="primary" id="newGameBtn">Nueva partida</button>
-    </div>
-  </main>
-
-  <div class="overlay" id="overlay">
-    <div class="modal">
-      <div class="emoji">🏆</div>
-      <h2>¡Nivel superado!</h2>
-      <p id="resultText"></p>
-      <button class="primary" id="nextBtn">Siguiente nivel</button>
-    </div>
-  </div>
+<div id="overlay" class="overlay">
+<div class="modal">
+<div style="font-size:54px">🏆</div>
+<h2 id="winTitle">¡Nivel completado!</h2>
+<div id="stars" class="stars"></div>
+<div id="diamond" class="diamond" style="display:none">💎 <b>¡MEMORIA PERFECTA!</b><br><small>Sin errores y sin pistas</small></div>
+<div id="challengeResult" class="challenge-result"></div>
+<p id="result"></p>
+<p id="record" class="sub"></p>
+<div class="modalBtns"><button id="again" class="again">Repetir</button><button id="next" class="next">Siguiente nivel</button></div>
+<button id="share" class="shareBtn">🤝 Retar a un amigo</button>
+</div>
+</div>
+<div id="toast" class="toast"></div>
 
 <script>
-const symbols = [
-  "🍎","🚗","⚽","🐶","🌟","🎸","🍕","🚀","🐸","🎯",
-  "🦁","🎲","🍉","✈️","🐙","👑","💎","🧩","🎮","🦖",
-  "🌈","🛸","🐼","🍩","🏀","🎹","🦋","🧠","🦊","🎈",
-  "🧸","🚲","🌵","🐳","🍓","🛵","🥑","🦜","🪐","🏎️"
-];
+const TOTAL=100, KEY="memoriaV2FinalData";
+const photos=Array.from({length:30},(_,i)=>`https://picsum.photos/seed/memoria-${i+1}/500/500`);
+let save=JSON.parse(localStorage.getItem(KEY)||'{"unlocked":1,"records":{}}');
+let current=Math.max(1,Math.min(TOTAL,Number(localStorage.getItem("memoryLevel")||1)));
+if(current>save.unlocked) current=save.unlocked;
 
-const levels = [
-  {pairs:6, cols:3},
-  {pairs:8, cols:4},
-  {pairs:10, cols:4},
-  {pairs:12, cols:4},
-  {pairs:15, cols:5},
-  {pairs:18, cols:6},
-  {pairs:21, cols:6},
-  {pairs:24, cols:6}
-];
-
-let levelIndex = Number(localStorage.getItem("memoryLevel") || 0);
-if(levelIndex >= levels.length) levelIndex = 0;
-
-let deck=[], first=null, second=null, lock=false, moves=0, matched=0;
-let startedAt=null, timerId=null, soundOn=true;
-
-const board = document.getElementById("board");
-const movesEl = document.getElementById("moves");
-const timeEl = document.getElementById("time");
-const levelEl = document.getElementById("level");
-const progressEl = document.getElementById("progress");
-const overlay = document.getElementById("overlay");
-const resultText = document.getElementById("resultText");
-const diffText = document.getElementById("difficultyText");
-
-function shuffle(arr){
-  for(let i=arr.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [arr[i],arr[j]]=[arr[j],arr[i]];
+let challenge=null;
+const qp=new URLSearchParams(location.search);
+if(qp.get("challenge")==="1"){
+  const l=Number(qp.get("level")), m=Number(qp.get("moves")), t=Number(qp.get("time"));
+  if(l>=1&&l<=TOTAL&&m>0&&t>=0){
+    challenge={level:l,moves:m,time:t,name:(qp.get("name")||"Un amigo").slice(0,30)};
+    current=l;
   }
-  return arr;
 }
 
-function beep(freq=440, duration=.06){
-  if(!soundOn) return;
-  try{
-    const ctx = new (window.AudioContext||window.webkitAudioContext)();
-    const osc=ctx.createOscillator(), gain=ctx.createGain();
-    osc.frequency.value=freq; osc.type="sine";
-    gain.gain.setValueAtTime(.045,ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+duration);
-    osc.connect(gain); gain.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime+duration);
-  }catch(e){}
+let deck=[],first=null,second=null,locked=false,moves=0,matched=0,streak=0,maxStreak=0,hints=3,errors=0,hintsUsed=0,start=null,timer=null,soundOn=true,lastResult=null;
+const $=id=>document.getElementById(id);
+
+function cfg(n){
+  let p;
+  if(n<=10)p=6+Math.floor((n-1)/2);
+  else if(n<=30)p=10+Math.floor((n-11)/4);
+  else if(n<=60)p=15+Math.floor((n-31)/6);
+  else p=20+Math.floor((n-61)/10);
+  p=Math.min(24,p);
+  let c=p<=7?3:p<=16?4:p<=20?5:6;
+  // star thresholds intentionally scale with the board, not level number.
+  return {p,c,three:Math.ceil(p*1.45),two:Math.ceil(p*2.05)};
 }
-
-function formatTime(sec){
-  const m=Math.floor(sec/60), s=sec%60;
-  return `${m}:${String(s).padStart(2,"0")}`;
+function sh(a){for(let i=a.length-1;i;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function fmt(s){return`${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`}
+function persist(){localStorage.setItem(KEY,JSON.stringify(save));if(!challenge)localStorage.setItem("memoryLevel",current)}
+function tone(f){if(!soundOn)return;try{let c=new(AudioContext||webkitAudioContext),o=c.createOscillator(),g=c.createGain();o.frequency.value=f;g.gain.value=.035;o.connect(g);g.connect(c.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.07);o.stop(c.currentTime+.07)}catch(e){}}
+function setup(){
+  clearInterval(timer); first=second=null; locked=false; moves=matched=streak=maxStreak=errors=hintsUsed=0; hints=3; start=null; lastResult=null;
+  $("moves").textContent=0;$("time").textContent="0:00";$("streak").textContent="0🔥";$("hints").textContent=hints;$("bar").style.width="0";$("overlay").classList.remove("on");
+  let c=cfg(current);$("level").textContent=current;$("badge").textContent=`Nivel ${current} · ${c.p} parejas`;
+  let r=save.records[current];$("best").textContent=r?`Mejor: ${r.moves} mov. · ${fmt(r.time)} · ${"⭐".repeat(r.stars)}`:"Aún sin récord";
+  if(challenge && challenge.level===current){
+    $("challengeBanner").classList.add("on");
+    $("challengeBanner").textContent=`🤝 Reto de ${challenge.name}: supera ${challenge.moves} movimientos · ${fmt(challenge.time)}`;
+  } else {$("challengeBanner").classList.remove("on")}
+  $("board").style.gridTemplateColumns=`repeat(${c.c},1fr)`;
+  let chosen=sh([...photos]).slice(0,c.p);deck=sh([...chosen,...chosen].map((x,i)=>({x,i})));render();
 }
-
-function startTimer(){
-  if(startedAt) return;
-  startedAt=Date.now();
-  timerId=setInterval(()=>{
-    timeEl.textContent=formatTime(Math.floor((Date.now()-startedAt)/1000));
-  },250);
-}
-
-function stopTimer(){
-  clearInterval(timerId);
-  timerId=null;
-}
-
-function setupLevel(){
-  stopTimer();
-  first=second=null; lock=false; moves=0; matched=0; startedAt=null;
-  movesEl.textContent="0"; timeEl.textContent="0:00"; progressEl.style.width="0%";
-  overlay.classList.remove("show");
-
-  const cfg=levels[levelIndex];
-  levelEl.textContent=levelIndex+1;
-  diffText.textContent=`Nivel ${levelIndex+1} · ${cfg.pairs} parejas`;
-  board.style.gridTemplateColumns=`repeat(${cfg.cols},1fr)`;
-
-  const chosen=shuffle([...symbols]).slice(0,cfg.pairs);
-  deck=shuffle([...chosen,...chosen].map((symbol,i)=>({id:i,symbol})));
-  render();
-}
-
 function render(){
-  board.innerHTML="";
-  deck.forEach((item, idx)=>{
-    const btn=document.createElement("button");
-    btn.className="card";
-    btn.dataset.idx=idx;
-    btn.setAttribute("aria-label","Carta oculta");
-    btn.innerHTML=`
-      <span class="card-inner">
-        <span class="face back"></span>
-        <span class="face front">${item.symbol}</span>
-      </span>`;
-    btn.addEventListener("click",()=>flip(btn,idx));
-    board.appendChild(btn);
+  $("board").innerHTML="";
+  deck.forEach((x,i)=>{
+    let b=document.createElement("button");b.className="card";b.setAttribute("aria-label","Carta de memoria");
+    b.innerHTML=`<span class="inner"><span class="face back"></span><span class="face front"><img src="${x.x}" alt="" loading="eager"></span></span>`;
+    b.onclick=()=>flip(b,i);$("board").appendChild(b);
   });
 }
-
-function flip(card, idx){
-  if(lock || card.classList.contains("flipped") || card.classList.contains("matched")) return;
-  startTimer();
-  card.classList.add("flipped");
-  beep(520,.045);
-
-  if(first===null){
-    first={card,idx};
-    return;
-  }
-
-  second={card,idx};
-  moves++;
-  movesEl.textContent=moves;
-  lock=true;
-
-  if(deck[first.idx].symbol===deck[second.idx].symbol){
+function startClock(){if(start)return;start=Date.now();timer=setInterval(()=>$("time").textContent=fmt(Math.floor((Date.now()-start)/1000)),250)}
+function flip(card,i){
+  if(locked||card.classList.contains("flip")||card.classList.contains("match")||card.classList.contains("hint"))return;
+  startClock();card.classList.add("flip");tone(520);
+  if(!first){first={card,i};return}
+  second={card,i};moves++;$("moves").textContent=moves;locked=true;
+  if(deck[first.i].x===deck[second.i].x){
     setTimeout(()=>{
-      first.card.classList.add("matched");
-      second.card.classList.add("matched");
-      first.card.classList.remove("flipped");
-      second.card.classList.remove("flipped");
-      matched++;
-      progressEl.style.width=`${matched/levels[levelIndex].pairs*100}%`;
-      beep(800,.08);
-      first=second=null; lock=false;
-      if(matched===levels[levelIndex].pairs) win();
-    },260);
-  }else{
-    setTimeout(()=>{
-      first.card.classList.remove("flipped");
-      second.card.classList.remove("flipped");
-      first=second=null; lock=false;
-      beep(250,.07);
-    },720);
+      first.card.classList.add("match");second.card.classList.add("match");first.card.classList.remove("flip");second.card.classList.remove("flip");
+      matched++;streak++;maxStreak=Math.max(maxStreak,streak);$("streak").textContent=streak+"🔥";$("bar").style.width=(matched/cfg(current).p*100)+"%";
+      if(streak>0&&streak%7===0){hints++;$("hints").textContent=hints;toast("🔥 Racha de 7: +1 pista")}
+      first=second=null;locked=false;tone(820);if(matched===cfg(current).p)win();
+    },250);
+  } else {
+    errors++;streak=0;$("streak").textContent="0🔥";
+    setTimeout(()=>{first.card.classList.remove("flip");second.card.classList.remove("flip");first=second=null;locked=false;tone(230)},720);
   }
 }
-
+function useHint(){
+  if(locked||hints<1)return;
+  let remaining=[...document.querySelectorAll(".card")].map((c,i)=>({c,i})).filter(o=>!o.c.classList.contains("match"));
+  if(!remaining.length)return;
+  hints--;hintsUsed++;$("hints").textContent=hints;
+  let target=remaining[Math.floor(Math.random()*remaining.length)],sym=deck[target.i].x,pair=remaining.filter(o=>deck[o.i].x===sym).slice(0,2);
+  locked=true;pair.forEach(o=>o.c.classList.add("hint"));
+  setTimeout(()=>{pair.forEach(o=>o.c.classList.remove("hint"));locked=false},2200);
+}
+function beatChallenge(m,s){
+  if(!challenge || challenge.level!==current)return null;
+  return m<challenge.moves || (m===challenge.moves && s<challenge.time);
+}
 function win(){
-  stopTimer();
-  const seconds=Math.floor((Date.now()-startedAt)/1000);
-  resultText.textContent=`Completaste ${levels[levelIndex].pairs} parejas en ${moves} movimientos y ${formatTime(seconds)}.`;
-  if(levelIndex < levels.length-1){
-    localStorage.setItem("memoryLevel", String(levelIndex+1));
-    document.getElementById("nextBtn").textContent="Siguiente nivel";
-  }else{
-    document.getElementById("nextBtn").textContent="Volver al nivel 1";
+  clearInterval(timer);
+  let sec=Math.floor((Date.now()-start)/1000),c=cfg(current),stars=moves<=c.three?3:moves<=c.two?2:1,perfect=errors===0&&hintsUsed===0;
+  let old=save.records[current],isRecord=!old||moves<old.moves||(moves===old.moves&&sec<old.time);
+  // keep a coherent best run: lower moves wins, tie breaks by time.
+  let newBest={moves,time:sec,stars,diamond:perfect,maxStreak};
+  if(old && (old.moves<moves || (old.moves===moves && old.time<=sec))) newBest={...old,stars:Math.max(old.stars||1,stars),diamond:!!old.diamond||perfect,maxStreak:Math.max(old.maxStreak||0,maxStreak)};
+  else if(old){newBest.stars=Math.max(old.stars||1,stars);newBest.diamond=!!old.diamond||perfect;newBest.maxStreak=Math.max(old.maxStreak||0,maxStreak)}
+  save.records[current]=newBest;save.unlocked=Math.max(save.unlocked,Math.min(TOTAL,current+1));persist();
+  lastResult={level:current,moves,time:sec,stars,perfect};
+  $("stars").textContent="⭐".repeat(stars)+"☆".repeat(3-stars);$("diamond").style.display=perfect?"block":"none";
+  $("result").textContent=`${moves} movimientos · ${fmt(sec)} · racha máxima ${maxStreak}`;$("record").textContent=isRecord?"🏅 Nuevo récord personal":`Récord: ${save.records[current].moves} mov. · ${fmt(save.records[current].time)}`;
+  const beat=beatChallenge(moves,sec),cr=$("challengeResult");
+  cr.className="challenge-result";
+  if(beat===true){cr.classList.add("win");cr.textContent=`🏆 ¡Superaste el reto de ${challenge.name}!`;$("winTitle").textContent="¡Reto superado!"}
+  else if(beat===false){cr.classList.add("lose");cr.textContent=`🤝 Te faltó superar la marca de ${challenge.name}`;$("winTitle").textContent="¡Nivel completado!"}
+  else {$("winTitle").textContent="¡Nivel completado!"}
+  $("next").textContent=current===TOTAL?"Volver al nivel 1":"Siguiente nivel";setTimeout(()=>$("overlay").classList.add("on"),350);
+}
+async function shareChallenge(){
+  if(!lastResult)return;
+  let name=localStorage.getItem("memoriaPlayerName")||"";
+  if(!name){name=(prompt("¿Qué nombre quieres que vea tu amigo en el reto?","")||"Jugador").trim().slice(0,30);localStorage.setItem("memoriaPlayerName",name)}
+  let u=new URL(location.href);u.search="";u.searchParams.set("challenge","1");u.searchParams.set("level",lastResult.level);u.searchParams.set("moves",lastResult.moves);u.searchParams.set("time",lastResult.time);u.searchParams.set("name",name);
+  const text=`🧠 Te reto en MEMORIA: Nivel ${lastResult.level}. Mi marca: ${lastResult.moves} movimientos en ${fmt(lastResult.time)}. ¿Puedes superarla?`;
+  try{
+    if(navigator.share){await navigator.share({title:"Reto de Memoria",text,url:u.toString()})}
+    else {await navigator.clipboard.writeText(text+"\n"+u.toString());toast("Enlace del reto copiado")}
+  }catch(e){}
+}
+function toast(t){$("toast").textContent=t;$("toast").style.display="block";setTimeout(()=>$("toast").style.display="none",1800)}
+function levels(){
+  let g=$("levels");g.innerHTML="";let ts=0,td=0;Object.values(save.records).forEach(r=>{ts+=r.stars||0;if(r.diamond)td++});
+  $("sumStars").textContent=ts;$("sumDiamonds").textContent=td;$("sumUnlocked").textContent=save.unlocked;
+  for(let n=1;n<=TOTAL;n++){
+    let b=document.createElement("button"),r=save.records[n],lock=n>save.unlocked;b.className="lvl"+(lock?" lock":"")+(n===current?" current":"");
+    b.innerHTML=`${lock?"🔒":n}<small>${r?"⭐".repeat(r.stars)+(r.diamond?" 💎":""):""}</small>`;
+    if(!lock)b.onclick=()=>{challenge=null;current=n;persist();showGame();setup()};g.appendChild(b);
   }
-  setTimeout(()=>overlay.classList.add("show"),450);
 }
-
-document.getElementById("restartBtn").onclick=setupLevel;
-document.getElementById("newGameBtn").onclick=()=>{
-  levelIndex=0;
-  localStorage.setItem("memoryLevel","0");
-  setupLevel();
-};
-document.getElementById("nextBtn").onclick=()=>{
-  levelIndex = (levelIndex+1)%levels.length;
-  localStorage.setItem("memoryLevel",String(levelIndex));
-  setupLevel();
-};
-document.getElementById("soundBtn").onclick=(e)=>{
-  soundOn=!soundOn;
-  e.currentTarget.textContent=soundOn?"🔊":"🔇";
-};
-
-setupLevel();
-
-if("serviceWorker" in navigator){
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
-}
+function showGame(){$("game").classList.add("on");$("levelsScreen").classList.remove("on")}
+$("hint").onclick=useHint;$("restart").onclick=setup;
+$("home").onclick=()=>{challenge=null;current=1;persist();setup()};
+$("map").onclick=()=>{levels();$("game").classList.remove("on");$("levelsScreen").classList.add("on")};
+$("close").onclick=showGame;$("again").onclick=setup;
+$("next").onclick=()=>{challenge=null;current=current===TOTAL?1:Math.min(save.unlocked,current+1);persist();setup()};
+$("share").onclick=shareChallenge;
+$("sound").onclick=e=>{soundOn=!soundOn;e.currentTarget.textContent=soundOn?"🔊":"🔇"};
+setup();
+if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"));
 </script>
-</body>
-</html>
+</body></html>
