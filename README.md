@@ -1,15 +1,3 @@
-# Memoria Blocks V2 Final
+# Memoria Blocks V2 — Photo Fix
 
-Incluye:
-- 100 niveles.
-- Fotografías reales en las cartas (Lorem Picsum, con caché al usarlas).
-- 1–3 estrellas.
-- Rachas y premio de pista cada 7 aciertos consecutivos.
-- Pistas fantasma de 2,2 segundos.
-- Diamante por memoria perfecta.
-- Récord personal.
-- Selector de niveles.
-- Retos por enlace sin necesidad de cuenta.
-- Web Share API para compartir por WhatsApp, Mensajes, etc.
-
-Los retos comparan primero movimientos y, en caso de empate, tiempo.
+Corrección: las fotografías están embebidas dentro del juego y ya no dependen de un servidor externo.
