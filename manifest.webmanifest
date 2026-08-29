@@ -1,7 +1,7 @@
 {
-  "name": "Memoria V3.9 Fotos Reales",
+  "name": "Memoria V3.14",
   "short_name": "Memoria",
-  "start_url": "./index.html?v=39",
+  "start_url": "./index.html?v=314",
   "scope": "./",
   "display": "standalone",
   "background_color": "#061421",
