@@ -1,3 +1,3 @@
-# Memoria V3.6 Offline
+Memoria V3.9 — Fotografías reales
 
-100 niveles y 120 conceptos fotográficos. La primera apertura debe hacerse con conexión para guardar las 120 fotografías en el dispositivo. Después puede funcionar sin conexión. Subir también sw.js a GitHub Pages.
+La primera apertura con Internet descarga y guarda 120 fotografías reales desde Wikimedia Commons. Después quedan guardadas en el dispositivo para jugar sin conexión. Las cartas no muestran nombres ni emojis.
