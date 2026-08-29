@@ -1,3 +1,5 @@
-Memoria V3.9 — Fotografías reales
-
-La primera apertura con Internet descarga y guarda 120 fotografías reales desde Wikimedia Commons. Después quedan guardadas en el dispositivo para jugar sin conexión. Las cartas no muestran nombres ni emojis.
+MEMORIA V3.10 — FOTOS REALES
+- Sin nombres ni texto en las cartas.
+- Elimina la caché fotográfica V3.9.
+- Búsqueda más estricta de fotografías reales y claras.
+- Guarda las fotos para uso sin conexión después de la primera descarga.
